@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Monitor System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #4f46e5;
+      margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+    input[readonly] {
+      background-color: #f8fafc;
+      font-weight: bold;
+    }
+    button {
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+    .btn-primary { background-color: #4f46e5; }
+    .btn-success { background-color: #10b981; }
+    .btn-warning { background-color: #f59e0b; }
+    .btn-secondary { background-color: #64748b; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: #f1f5f9;
+    }
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>
+      Monitoring Kesehatan 
+      <span id="statusBadge" class="badge">Terputus</span>
+    </h2>
+
+    <!-- Nama & Bluetooth -->
+    <div class="form-group">
+      <label>Nama Pasien / Subjek :</label>
+      <div class="row">
+        <input type="text" id="nama" placeholder="Masukkan nama...">
+        <button class="btn btn-primary" id="btnConnect" onclick="connectBluetooth()">Connect</button>
+      </div>
+    </div>
+
+    <!-- HR & Temp -->
+    <div class="row">
+      <div class="form-group" style="flex:1;">
+        <label>Heart Rate (HR) :</label>
+        <input type="text" id="hr" readonly value="-- BPM">
+      </div>
+      <div class="form-group" style="flex:1;">
+        <label>Temperatur :</label>
+        <input type="text" id="temp" readonly value="-- °C">
+      </div>
+    </div>
+
+    <!-- Tombol Aksi -->
+    <div class="row" style="margin-top: 5px;">
+      <button class="btn btn-success" style="flex:2;" onclick="saveData()">Save Data</button>
+      <button class="btn btn-warning" style="flex:1;" id="btnSimulate" onclick="toggleSimulation()">Simulasi Data</button>
+    </div>
+
+    <!-- Tabel -->
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>HR</th>
+          <th>Temperature</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr>
+          <td colspan="3" style="color: #888; font-style: italic;">Belum ada data tersimpan</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Download -->
+    <div class="footer">
+      <button class="btn btn-secondary" onclick="downloadCSV()">Download (CSV)</button>
+    </div>
+  </div>
+
+  <script>
+    let port;
+    let reader;
+    let savedRecords = [];
+    let isSimulating = false;
+    let simInterval = null;
+
+    async function connectBluetooth() {
+      if (isSimulating) stopSimulation();
+      try {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        document.getElementById('statusBadge').innerText = "Terhubung";
+        document.getElementById('statusBadge.style').background = "#d1fae5";
+        document.getElementById('btnConnect').innerText = "Connected";
+
+        const textDecoder = new TextDecoderStream();
+        port.readable.pipeTo(textDecoder.writable);
+        reader = textDecoder.readable.getReader();
+        readData();
+      } catch (error) {
+        alert("Gagal koneksi Bluetooth. Masuk ke Mode Simulasi.");
+        startSimulation();
+      }
+    }
+
+    async function readData() {
+      let buffer = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (value) {
+          buffer += value;
+          let lines = buffer.split("\n");
+          buffer = lines.pop();
+          for (let line of lines) {
+            line = line.trim();
+            if (line.includes(",")) {
+              let p = line.split(",");
+              updateDisplay(p[0], p[1]);
+            }
+          }
+        }
+      }
+    }
+
+    function toggleSimulation() {
+      if (isSimulating) stopSimulation();
+      else startSimulation();
+    }
+
+    function startSimulation() {
+      isSimulating = true;
+      document.getElementById('statusBadge').innerText = "Simulasi Aktif";
+      document.getElementById('btnSimulate').innerText = "Stop Simulasi";
+      
+      simInterval = setInterval(() => {
+        let hr = Math.floor(Math.random() * (95 - 65 + 1)) + 65;
+        let temp = (Math.random() * (37.4 - 36.1) + 36.1).toFixed(1);
+        updateDisplay(hr, temp);
+      }, 1500);
+    }
+
+    function stopSimulation() {
+      isSimulating = false;
+      clearInterval(simInterval);
+      document.getElementById('statusBadge').innerText = "Terputus";
+      document.getElementById('btnSimulate').innerText = "Simulasi Data";
+    }
+
+    function updateDisplay(hr, temp) {
+      document.getElementById('hr').value = hr + " BPM";
+      document.getElementById('temp').value = temp + " °C";
+    }
+
+    function saveData() {
+      let nama = document.getElementById('nama').value.trim();
+      let hr = document.getElementById('hr').value;
+      let temp = document.getElementById('temp').value;
+
+      if (!nama) { alert("Isi nama terlebih dahulu!"); return; }
+      if (hr === "-- BPM") { alert("Belum ada data sensor!"); return; }
+
+      savedRecords.push({ nama, hr, temp });
+      
+      let tbody = document.getElementById('tableBody');
+      if (savedRecords.length === 1) tbody.innerHTML = ""; // Hapus teks kosong
+
+      let tr = document.createElement('tr');
+      tr.innerHTML = `<td><b>${nama}</b></td><td>${hr}</td><td>${temp}</td>`;
+      tbody.appendChild(tr);
+    }
+
+    function downloadCSV() {
+      if (savedRecords.length === 0) { alert("Belum ada data!"); return; }
+      let csv = "Nama,HR,Temperature\n";
+      savedRecords.forEach(r => { csv += `"${r.nama}","${r.hr}","${r.temp}"\n`; });
+      
+      let blob = new Blob([csv], { type: 'text/csv' });
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "data_kesehatan.csv";
+      link.click();
+    }
+  </script>
+</body>
+</html>
