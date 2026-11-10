@@ -3,278 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Health Monitor System</title>
-  <!-- Google Fonts & Font Awesome Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Cute Health Monitor ✨</title>
+  <!-- Google Font: Quicksand yang bulat dan imut -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --bg: #f8fafc;
+      --bg-color: #fff0f5; /* LavenderBlush / Soft Pink */
       --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --primary: #ffb7b2; /* Pastel Pink */
+      --primary-hover: #ff9aa2;
+      --secondary: #b5ead7; /* Pastel Mint */
+      --accent: #c7ceea; /* Pastel Lilac */
+      --text: #5c5555;
+      --border: #f3e5f5;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Quicksand', sans-serif;
     }
 
     body {
-      background-color: var(--bg);
+      background-color: var(--bg-color);
       color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      background-image: radial-gradient(#ffccd5 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
     }
 
     .container {
       width: 100%;
-      max-width: 650px;
+      max-width: 580px;
       background: var(--card-bg);
       padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(255, 183, 178, 0.35);
+      border: 3px solid #ffdde1;
     }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header h2 {
+    h2 {
+      color: #d46a92;
       font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
+      text-align: center;
+      margin-bottom: 10px;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .status-badge {
-      font-size: 0.75rem;
-      padding: 4px 10px;
+      font-size: 0.8rem;
+      padding: 6px 14px;
       border-radius: 20px;
-      background-color: #f1f5f9;
-      color: var(--text-muted);
-      font-weight: 600;
+      background-color: #ffeaa7;
+      color: #d68910;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
     }
 
     .status-badge.connected {
-      background-color: #d1fae5;
-      color: #065f46;
+      background-color: #d4edda;
+      color: #155724;
     }
 
     .status-badge.simulated {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 16px;
-      margin-bottom: 25px;
+      background-color: #fff3cd;
+      color: #856404;
     }
 
     .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      margin-bottom: 16px;
     }
 
-    .form-group label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-muted);
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #8860d0;
+      font-size: 0.9rem;
     }
 
-    .input-row {
+    .row {
       display: flex;
       gap: 10px;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 10px 14px;
-      font-size: 0.95rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      padding: 11px 16px;
+      font-size: 14px;
+      border: 2px solid #f3e5f5;
+      border-radius: 16px;
       outline: none;
-      transition: border 0.2s;
+      background-color: #faf8fc;
+      color: #4a4545;
+      transition: all 0.3s ease;
     }
 
     input[type="text"]:focus {
-      border-color: var(--primary);
+      border-color: #ffb7b2;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 183, 178, 0.4);
     }
 
     input[readonly] {
-      background-color: #f8fafc;
-      font-weight: 600;
-      color: var(--text);
+      font-weight: bold;
+      color: #5c5555;
     }
 
-    .btn {
+    button {
       padding: 10px 18px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       border: none;
-      border-radius: 8px;
+      border-radius: 16px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-connect {
+      background-color: #b5ead7;
+      color: #2d6a4f;
       white-space: nowrap;
-      transition: all 0.2s;
     }
 
-    .btn-primary {
-      background-color: var(--primary);
-      color: white;
+    .btn-save {
+      background-color: #ffb7b2;
+      color: #8a3b35;
+      flex: 2;
     }
 
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
+    .btn-simulate {
+      background-color: #ffdac1;
+      color: #b45309;
+      flex: 1.2;
     }
 
-    .btn-success {
-      background-color: var(--success);
-      color: white;
-    }
-
-    .btn-success:hover {
-      background-color: #059669;
-    }
-
-    .btn-warning {
-      background-color: var(--warning);
-      color: white;
-    }
-
-    .btn-warning:hover {
-      background-color: #d97706;
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .btn-outline:hover {
-      background-color: #f1f5f9;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 5px;
+    .btn-download {
+      background-color: #c7ceea;
+      color: #364f6b;
+      width: 100%;
+      margin-top: 15px;
     }
 
     .table-container {
       margin-top: 20px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 16px;
       overflow: hidden;
+      border: 2px solid #f3e5f5;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      text-align: left;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
     }
 
     th {
-      background-color: #f1f5f9;
-      padding: 12px 16px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
+      background-color: #f3e5f5;
+      color: #8860d0;
+      font-weight: 700;
     }
 
     td {
-      padding: 12px 16px;
-      border-top: 1px solid var(--border);
-      font-size: 0.9rem;
+      background-color: #fff;
+      border-top: 1px solid #f3e5f5;
     }
 
     .empty-row {
-      text-align: center;
-      color: var(--text-muted);
-      padding: 20px;
+      color: #b0a8b9;
       font-style: italic;
-    }
-
-    .table-footer {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <h2><i class="fa-solid fa-heart-pulse"></i> Monitoring Kesehatan</h2>
-      <span id="statusBadge" class="status-badge">Terputus</span>
-    </div>
+    <h2>✨ Monitoring Kesehatan 🌸</h2>
+    <div id="statusBadge" class="status-badge">💤 Status: Terputus (Mode Siap)</div>
 
-    <!-- Form Controls -->
-    <div class="form-grid">
-      <!-- Input Nama & Tombol Bluetooth -->
-      <div class="form-group">
-        <label for="nama">Nama Pasien / Subjek</label>
-        <div class="input-row">
-          <input type="text" id="nama" placeholder="Masukkan nama pasien...">
-          <button id="btnConnect" class="btn btn-primary" onclick="connectBluetooth()">
-            <i class="fa-bluetooth-b fab"></i> Connect
-          </button>
-        </div>
-      </div>
-
-      <!-- Live Sensor Data -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-        <div class="form-group">
-          <label for="hr"><i class="fa-solid fa-heart" style="color: #ef4444;"></i> Heart Rate (HR)</label>
-          <input type="text" id="hr" readonly placeholder="-- BPM">
-        </div>
-
-        <div class="form-group">
-          <label for="temp"><i class="fa-solid fa-temperature-high" style="color: #f59e0b;"></i> Temperatur</label>
-          <input type="text" id="temp" readonly placeholder="-- °C">
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="button-group">
-        <button class="btn btn-success" style="flex: 2;" onclick="saveData()">
-          <i class="fa-solid fa-floppy-disk"></i> Save Data
-        </button>
-        <button id="btnSimulate" class="btn btn-warning" style="flex: 1;" onclick="toggleSimulation()">
-          <i class="fa-solid fa-flask"></i> Simulasi Data
-        </button>
+    <!-- Nama & Bluetooth -->
+    <div class="form-group">
+      <label>🎀 Nama Pasien / Subjek :</label>
+      <div class="row">
+        <input type="text" id="nama" placeholder="Ketik nama kamu di sini...">
+        <button class="btn-connect" id="btnConnect" onclick="connectBluetooth()">🔗 Connect</button>
       </div>
     </div>
 
-    <!-- Data Table -->
+    <!-- HR & Temp -->
+    <div class="row" style="margin-bottom: 16px;">
+      <div class="form-group" style="flex:1; margin-bottom:0;">
+        <label>💓 Heart Rate (HR) :</label>
+        <input type="text" id="hr" readonly value="-- BPM">
+      </div>
+      <div class="form-group" style="flex:1; margin-bottom:0;">
+        <label>🌡️ Temperatur :</label>
+        <input type="text" id="temp" readonly value="-- °C">
+      </div>
+    </div>
+
+    <!-- Tombol Aksi -->
+    <div class="row">
+      <button class="btn-save" onclick="saveData()">💾 Simpan Data</button>
+      <button class="btn-simulate" id="btnSimulate" onclick="toggleSimulation()">🎲 Simulasi</button>
+    </div>
+
+    <!-- Tabel -->
     <div class="table-container">
       <table>
         <thead>
@@ -285,19 +246,15 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr id="emptyRow">
-            <td colspan="3" class="empty-row">Belum ada data tersimpan.</td>
+          <tr>
+            <td colspan="3" class="empty-row">Belum ada data tersimpan, yuk isi dulu! ✨</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Download Button -->
-    <div class="table-footer">
-      <button class="btn btn-outline" onclick="downloadCSV()">
-        <i class="fa-solid fa-file-csv"></i> Download (CSV)
-      </button>
-    </div>
+    <!-- Download -->
+    <button class="btn-download" onclick="downloadCSV()">📥 Download Data (CSV)</button>
   </div>
 
   <script>
@@ -307,154 +264,107 @@
     let isSimulating = false;
     let simInterval = null;
 
-    // 1. KONEKSI BLUETOOTH SERIAL
     async function connectBluetooth() {
-      // Matikan simulasi jika sedang berjalan
       if (isSimulating) stopSimulation();
-
       try {
         port = await navigator.serial.requestPort();
         await port.open({ baudRate: 115200 });
-
-        updateStatus("Terhubung", "connected");
-        document.getElementById('btnConnect').innerText = "Connected";
+        updateStatus("✨ Terhubung ke Bluetooth!", "connected");
+        document.getElementById('btnConnect').innerText = "✅ Connected";
 
         const textDecoder = new TextDecoderStream();
         port.readable.pipeTo(textDecoder.writable);
         reader = textDecoder.readable.getReader();
-
-        readSerialData();
+        readData();
       } catch (error) {
-        console.error("Gagal koneksi Bluetooth:", error);
-        alert("Gagal koneksi Bluetooth! Menjalankan mode Simulasi Praktikum otomatis.");
+        alert("Bluetooth tidak tersambung. Mengaktifkan Mode Simulasi Praktikum otomatis! 🌸");
         startSimulation();
       }
     }
 
-    // Membaca Data Serial dari ESP32
-    async function readSerialData() {
+    async function readData() {
       let buffer = "";
       while (true) {
         const { value, done } = await reader.read();
-        if (done) {
-          reader.releaseLock();
-          break;
-        }
+        if (done) break;
         if (value) {
           buffer += value;
           let lines = buffer.split("\n");
           buffer = lines.pop();
-
           for (let line of lines) {
             line = line.trim();
-            if (line.length > 0) {
-              let parts = line.split(",");
-              if (parts.length === 2) {
-                updateDisplays(parts[0], parts[1]);
-              }
+            if (line.includes(",")) {
+              let p = line.split(",");
+              updateDisplay(p[0], p[1]);
             }
           }
         }
       }
     }
 
-    // 2. SIMULASI DATA ACAK (PRAKTIKUM)
     function toggleSimulation() {
-      if (isSimulating) {
-        stopSimulation();
-      } else {
-        startSimulation();
-      }
+      if (isSimulating) stopSimulation();
+      else startSimulation();
     }
 
     function startSimulation() {
       isSimulating = true;
-      updateStatus("Mode Simulasi", "simulated");
-      document.getElementById('btnSimulate').innerHTML = `<i class="fa-solid fa-stop"></i> Stop Simulasi`;
-
-      // Hasilkan data acak setiap 1.5 detik
+      updateStatus("🎨 Mode Simulasi Aktif (Praktikum)", "simulated");
+      document.getElementById('btnSimulate').innerText = "🛑 Stop Simulasi";
+      
       simInterval = setInterval(() => {
-        // HR acak normal (65 - 95 BPM)
-        const randomHR = Math.floor(Math.random() * (95 - 65 + 1)) + 65;
-        // Temperatur acak normal (36.1 - 37.4 °C)
-        const randomTemp = (Math.random() * (37.4 - 36.1) + 36.1).toFixed(1);
-
-        updateDisplays(randomHR, randomTemp);
+        let hr = Math.floor(Math.random() * (95 - 65 + 1)) + 65;
+        let temp = (Math.random() * (37.4 - 36.1) + 36.1).toFixed(1);
+        updateDisplay(hr, temp);
       }, 1500);
     }
 
     function stopSimulation() {
       isSimulating = false;
       clearInterval(simInterval);
-      updateStatus("Terputus", "");
-      document.getElementById('btnSimulate').innerHTML = `<i class="fa-solid fa-flask"></i> Simulasi Data`;
+      updateStatus("💤 Status: Terputus (Mode Siap)", "");
+      document.getElementById('btnSimulate').innerText = "🎲 Simulasi";
     }
 
-    // Helper untuk Update Nilai ke Layar
-    function updateDisplays(hr, temp) {
+    function updateDisplay(hr, temp) {
       document.getElementById('hr').value = hr + " BPM";
       document.getElementById('temp').value = temp + " °C";
     }
 
-    // Helper Badge Status
     function updateStatus(text, className) {
       const badge = document.getElementById('statusBadge');
       badge.innerText = text;
       badge.className = "status-badge " + className;
     }
 
-    // 3. SIMPAN DATA KE TABEL
     function saveData() {
-      const nama = document.getElementById('nama').value.trim();
-      const hr = document.getElementById('hr').value;
-      const temp = document.getElementById('temp').value;
+      let nama = document.getElementById('nama').value.trim();
+      let hr = document.getElementById('hr').value;
+      let temp = document.getElementById('temp').value;
 
-      if (!nama) {
-        alert("Silakan isi Nama terlebih dahulu!");
-        return;
-      }
-      if (!hr || !temp || hr === "-- BPM") {
-        alert("Data HR dan Temperatur belum tersedia!");
-        return;
-      }
+      if (!nama) { alert("Isi nama dulu ya, kak! 🎀"); return; }
+      if (hr === "-- BPM") { alert("Belum ada data sensor masuk! 💡"); return; }
 
-      // Hapus baris kosong pada tabel jika ini data pertama
-      const emptyRow = document.getElementById('emptyRow');
-      if (emptyRow) emptyRow.remove();
-
-      // Simpan ke Array
       savedRecords.push({ nama, hr, temp });
+      
+      let tbody = document.getElementById('tableBody');
+      if (savedRecords.length === 1) tbody.innerHTML = "";
 
-      // Tambahkan baris baru ke tabel
-      const tbody = document.getElementById('tableBody');
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td><strong>${nama}</strong></td>
-        <td>${hr}</td>
-        <td>${temp}</td>
-      `;
-      tbody.appendChild(row);
+      let tr = document.createElement('tr');
+      tr.innerHTML = `<td><b>${nama}</b></td><td>${hr}</td><td>${temp}</td>`;
+      tbody.appendChild(tr);
     }
 
-    // 4. DOWNLOAD FILE CSV
     function downloadCSV() {
-      if (savedRecords.length === 0) {
-        alert("Belum ada data tersimpan untuk di-download!");
-        return;
-      }
-
-      let csvContent = "data:text/csv;charset=utf-8,Nama,HR,Temperature\n";
-      savedRecords.forEach(r => {
-        csvContent += `"${r.nama}","${r.hr}","${r.temp}"\n`;
-      });
-
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Data_Kesehatan_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
+      if (savedRecords.length === 0) { alert("Belum ada data yang bisa di-download! 📥"); return; }
+      let csv = "Nama,HR,Temperature\n";
+      savedRecords.forEach(r => { csv += `"${r.nama}","${r.hr}","${r.temp}"\n`; });
+      
+      let blob = new Blob([csv], { type: 'text/csv' });
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "data_kesehatan_pastel.csv";
       link.click();
-      document.body.removeChild(link);
     }
   </script>
 </body>
